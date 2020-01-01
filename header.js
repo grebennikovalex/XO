@@ -10,8 +10,8 @@ export default function  Header() {
             <Text style = {{
                 fontSize: 20, 
                 fontWeight: 'bold', 
-                color: 'white'}}>
-                TIC TAC TOE   
+                color: 'white', fontFamily: 'custom'  }}>
+                Custom fonts failed...  
             </Text>
         </View>
     ) 
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
       marginTop: 28,
       height: '10%',
       backgroundColor: '#273c75',
-      fontFamily: 'baloo-bhai'      
-  
+     
     }
 })    

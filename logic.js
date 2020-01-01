@@ -2,7 +2,7 @@
 	
 
 	
- export function winCheck(boxes, mark) {
+ export function winCheck(boxes) {
 	
 	for (let i = 0; i < 9; i++) {
 		

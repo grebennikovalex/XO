@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity  , Image } from 'react-native';
-
+import React from 'react';
+import { StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
 
 
 export default function Box({ item, pressHandler })  {

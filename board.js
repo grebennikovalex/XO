@@ -1,6 +1,8 @@
-import React from 'react'; import { winCheck } from './logic';
-import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity } from 'react-native';
-import Box from './box'; 
+import { winCheck } from './logic'; 
+import React, { useState } from 'react';
+import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, Text } from 'react-native';
+import Box from './box';
+
 
 function randomX(boxes) {
     boxes.map(box => box.move++)
@@ -25,22 +27,12 @@ function randomX(boxes) {
     }
     console.log(boxes[3].move)
     }
-  
-    function reloadBoard() {
-      putMark((boxes) => {
-      return  boxes.map(box => {
-          box.mark = ''
-          box.img = ''
-          box.flag = true
-          box.num = 0
-          box.move = 0
-          return box
-      })
-      });
-    }
+
+
   
 
 export default function Board()  {
+
     const [boxes, putMark] = useState([ 
         {mark: '', key: 0, img: '', flag: true, num: 0, move: 0},  
         {mark: '', key: 1, img: '', flag: true, num: 0, move: 0},  
@@ -75,16 +67,30 @@ const pressHandler = (key) => {
   });
 
   
-  if(winCheck(boxes)) {
-    return
-  }
+  if(winCheck(boxes)) return
+  
 
   if(boxes[0].move < 9) randomX(boxes)
   
 }
 
-    return (
+function reloadBoard() {
 
+  putMark((boxes) => {
+  return  boxes.map(box => {
+      box.mark = ''
+      box.img = ''
+      box.flag = true
+      box.num = 0
+      box.move = 0
+      return box
+  });
+});
+}
+
+    return (
+    
+    <View style = {{flex: 1}}>
     <View style = {styles.board}>
           <FlatList 
           data = {boxes}
@@ -93,16 +99,22 @@ const pressHandler = (key) => {
           <Box 
           item = {item} 
           pressHandler = {pressHandler}/> )}
-            />
-    
-
-    <TouchableOpacity 
-        style = {styles.reload}
-        onPress = {() => reloadBoard(boxes)}>
-    </TouchableOpacity>
-
+          />
     </View>
+     <TouchableOpacity 
+     style = {styles.reload}
+     onPress = {() => reloadBoard()}>
+         <Text style = {{
+             fontSize: 20, 
+             fontWeight: 'bold', 
+             color: 'white', fontFamily: 'custom'}}>
+             RELOAD    
+         </Text>    
+    </TouchableOpacity>
+    </View>  
 
+    
+    
     )
 }
 
@@ -119,7 +131,8 @@ board: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: -3,
-    height: '10%',
+    height: '20%',
     backgroundColor: '#273c75',
-  }
+  },
+  
 });
