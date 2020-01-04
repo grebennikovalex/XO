@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Header from './header'; 
 import Board from './board'; 
 import * as Font from 'expo-font';
@@ -16,8 +16,8 @@ export default function App()  {
 if(fontsLoaded){
     return (
       <View style = {{flex: 1}}>
-      <Header />
-      <Board />
+        <Header />
+        <Board />
       </View>
     )
 
