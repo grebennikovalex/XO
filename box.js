@@ -1,28 +1,43 @@
-import React from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Dimensions, TouchableWithoutFeedback, Animated, View, TouchableOpacity } from 'react-native';
 
 
 export default function Box({ item, pressHandler })  {
+
+  const markScale = new Animated.Value(.5);
   
- return (
+  useEffect(() => {
+    Animated.spring(
+      markScale,
+      {
+        toValue: 1,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: true
+      }
+    ).start();
+  }, [item.mark])
 
-      <TouchableOpacity   
-          style =  {[
-          styles.box,
-          {backgroundColor:  item.color ? '#6a89cc' : '#a9e4f1' }
-          ]}
-          disabled = {!item.flag}
-          onPress = {() => {pressHandler(item.key)}}
-          >
-     
+const animatedStyle = {transform: [{scale: markScale}]}
+  
+return (
+    
+      <TouchableWithoutFeedback
+         
+             disabled = {!item.flag}
+             onPress = {() => {pressHandler(item.key)}}>    
+          <View 
+             style =  {[
+             styles.box,
+             {backgroundColor:  item.color }
+             ]}>
 
-        <Image 
-          style = {styles.stretch}
-          source = {item.img}
-         />
-        
-     
-    </TouchableOpacity>
+          <Animated.Image 
+             style = {animatedStyle}
+             source = {item.img}/> 
+          </View>  
+      </TouchableWithoutFeedback>
+    
   )
 
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 
-export default function  Header() {
+export default function  Header({ box }) {
    
           
     return (
@@ -12,7 +12,7 @@ export default function  Header() {
                 fontSize: 20, 
                 fontWeight: 'bold', 
                 color: 'white', fontFamily: 'custom'  }}>
-                Custom fonts failed...  
+                MOVE: {box.move}    WINNER:  {box.win}
             </Text>
             
         </View>
