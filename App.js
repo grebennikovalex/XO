@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import Board from './board'; 
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo'; 
+import Navigator from './routes/homeStack';
 
 
 const getFonts = () => Font.loadAsync({ 'custom': require('./assets/fonts/MPLUSRounded1c-Black.ttf') });
+
+
 
 export default function App()  {
 
@@ -15,9 +16,7 @@ export default function App()  {
 
 if(fontsLoaded){
     return (
-      <View style = {{flex: 1}}>
-      <Board />
-      </View>
+      <Navigator/>
     )
 
   } else {

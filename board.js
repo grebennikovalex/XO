@@ -1,28 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, Text } from 'react-native';
 import Box from './box';
 import Header from './header';
-import  useTimeout  from 'use-timeout';
+import { Audio } from 'expo-av';
 
+const win = new Audio.Sound();
+const pop = new Audio.Sound();
+const off = new Audio.Sound();
+      
+win.loadAsync(require('./assets/win.mp3'));
+pop.loadAsync(require('./assets/pop.mp3'));
+off.loadAsync(require('./assets/off.mp3'));
 
+console.disableYellowBox = true;
   
-export default function Board()  {
+export default function Board( { navigation } )  {
 
    const [boxes, putMark] = useState([ 
-      {mark: '', key: 0, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 1, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 2, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 3, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 4, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 5, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 6, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 7, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'},  
-      {mark: '', key: 8, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1'}
+      {mark: '', key: 0, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 1, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 2, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 3, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 4, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 5, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 6, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 7, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'},  
+      {mark: '', key: 8, img: '', flag: false, num: 0, move: 0, win: '', color: '#a9e4f1', winimg: '', off: '', boxie: '#33d9b2'}
       ]);
+
+const [player, setPlayer] = useState(
+        {key: navigation.getParam('key'),
+         playerName: navigation.getParam('playerName'),
+         won: navigation.getParam('won'),
+         lost: lost = navigation.getParam('lost'),
+         color: '#a9e4f1'})
 
         
 const pressHandler = (key) => {
-  
+      
     putMark((boxes) => {
     return boxes.map(box => {
       box.move++
@@ -78,6 +93,9 @@ logic(boxes)
                 box.move = 0
                 box.win =''
                 box.color = '#a9e4f1'
+                box.off = ''
+                box.winimg = ''
+                box.boxie = '#33d9b2'
                 
                 return box
 
@@ -92,16 +110,20 @@ logic(boxes)
   
   
   function putX(box, bool) {
-    boxes.map(box => box.move++)
-    boxes[box].flag = false
-    boxes[box].mark = 'x'
-    boxes[box].num = 1
-    boxes[box].img = require('./assets/x.png')
-    console.log(boxes[box].move)    
-    if (boxes[0].move === 9 && !bool) {
+        //pop.replayAsync();  
+        boxes.map(box => box.move++)
+        boxes[box].flag = false
+        boxes[box].mark = 'x'
+        boxes[box].num = 1
+        boxes[box].img = require('./assets/x.png')
+        console.log(boxes[box].move)    
+        if (boxes[0].move === 9 && !bool) {
+                //off.replayAsync();   
         boxes.map(box => {
                 box.color = '#c0c0c0'
-                box.win = 'STANDOFF'                            
+                box.win = 'STANDOFF'  
+                box.off = '  STANDOFF'
+                box.boxie = '#576574'                          
                 return box
                                
         });
@@ -112,10 +134,19 @@ logic(boxes)
 
   
 function winFill(a, b, c) {
+        //win.replayAsync();   
         boxes[a].color = '#6a89cc'
         boxes[b].color = '#6a89cc'
         boxes[c].color = '#6a89cc'
-        boxes.map(box => box.flag = false)
+        boxes.map(box => {
+                box.flag = false
+                box.boxie = '#ff9f43'
+        })
+
+        if(boxes[a].win === 'x') player.lost++
+        else if(boxes[a].win === 'o') player.won++
+      
+
       } 
        
   
@@ -332,11 +363,22 @@ function winFill(a, b, c) {
     
 } 
 
+const toPlayers = () => {
+        navigation.navigate('Players')
+        
+}
+
+
+
+
    return (
     
     <View style = {{flex: 1}}>
           <Header
           box = {boxes[0]}
+          player = {player.playerName}          
+          won = {player.won}
+          lost = {player.lost}
           />
     <View style = {styles.board}>
           <FlatList 
@@ -358,8 +400,16 @@ function winFill(a, b, c) {
              START    
          </Text>    
     </TouchableOpacity>
+    <TouchableOpacity style = {styles.playersBtn}
+             onPress = {() => toPlayers()}>
+            <Text style = {{
+             fontSize: 20, 
+             fontWeight: 'bold', 
+             color: 'white', fontFamily: 'custom'}}>
+                PLAYERS
+            </Text>
+    </TouchableOpacity>
     </View>  
-
     
     )
 }
@@ -367,19 +417,29 @@ function winFill(a, b, c) {
 const styles = StyleSheet.create({
 
   board: {
-    height: Dimensions.get('screen').width + 3,
-    flexDirection: 'row',
-    padding: 3,
-    justifyContent: 'center',
+        height: Dimensions.get('screen').width + 3,
+        flexDirection: 'row',
+        padding: 3,
+        justifyContent: 'center',
+        marginTop: -8,
+
   },
 
   reload: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: -3,
-    height: '15%',
-    backgroundColor: '#273c75',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: -3,
+        
+        backgroundColor: '#487eb0',
   },
+
+  playersBtn: {
+        flex: 1,
+        backgroundColor: '#487eb0',   
+        alignItems: 'center',
+        justifyContent: 'center',
+  }
   
 })
 

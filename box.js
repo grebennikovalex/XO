@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Dimensions, TouchableWithoutFeedback, Animated, View, TouchableOpacity } from 'react-native';
 
 
 export default function Box({ item, pressHandler })  {
 
-  const markScale = new Animated.Value(.5);
+  const markScale = new Animated.Value(.1);
   
   useEffect(() => {
     Animated.spring(
