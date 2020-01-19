@@ -11,13 +11,12 @@ const screens = {
     Players: {
         screen: Players,
         navigationOptions: {
-            title: 'PLAYERS',
-           
+            title: 'XO',
+            headerTitleAlign: 'center',
+                       
             headerStyle: {
-                backgroundColor: '#c8d6e5',
-                
-               
-
+                backgroundColor: '#487eb0',
+                        
             }
             
         }

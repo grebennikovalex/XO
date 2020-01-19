@@ -2,6 +2,7 @@
   "expo": {
     "name": "XO",
     "slug": "XO",
+    
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,7 +25,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.grebennikovalex"
+    },
+    "android": {
+      "package": "com.grebennikovalex"
     }
   }
 }
