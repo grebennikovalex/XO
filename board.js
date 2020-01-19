@@ -110,7 +110,7 @@ logic(boxes)
   
   
   function putX(box, bool) {
-        //pop.replayAsync();  
+        pop.replayAsync();  
         boxes.map(box => box.move++)
         boxes[box].flag = false
         boxes[box].mark = 'x'
@@ -118,12 +118,12 @@ logic(boxes)
         boxes[box].img = require('./assets/x.png')
         console.log(boxes[box].move)    
         if (boxes[0].move === 9 && !bool) {
-                //off.replayAsync();   
+                off.replayAsync();   
         boxes.map(box => {
                 box.color = '#c0c0c0'
                 box.win = 'STANDOFF'  
                 box.off = '  STANDOFF'
-                box.boxie = '#576574'                          
+                box.boxie = '#c0c0c0'                          
                 return box
                                
         });
@@ -134,7 +134,7 @@ logic(boxes)
 
   
 function winFill(a, b, c) {
-        //win.replayAsync();   
+        win.replayAsync();   
         boxes[a].color = '#6a89cc'
         boxes[b].color = '#6a89cc'
         boxes[c].color = '#6a89cc'
@@ -395,7 +395,7 @@ const toPlayers = () => {
      onPress = {() => reloadBoard()}>
          <Text style = {{
              fontSize: 20, 
-             fontWeight: 'bold', 
+             
              color: 'white', fontFamily: 'custom'}}>
              START    
          </Text>    
@@ -404,7 +404,7 @@ const toPlayers = () => {
              onPress = {() => toPlayers()}>
             <Text style = {{
              fontSize: 20, 
-             fontWeight: 'bold', 
+             
              color: 'white', fontFamily: 'custom'}}>
                 PLAYERS
             </Text>

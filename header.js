@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     text: {
         
         fontSize: 22, 
-        fontWeight: 'bold', 
+        
         color: 'white',
         fontFamily: 'custom'
     }

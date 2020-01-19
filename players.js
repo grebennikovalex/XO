@@ -1,32 +1,26 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, Text, Animated} from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, TouchableOpacity, Text, Animated, Modal} from 'react-native';
 import AddPlayer from './addPlayer';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-let opacity = 1
 
-const rightAction = (progress, dragX) => {
-    opacity = dragX.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0.5, 0]
-
-})
+const rightAction = ( playerName ) => {
+  
     return(
         <View style = {styles.deletePlayer}>
             <Text style ={{
                 fontSize: 20, 
                 fontWeight: 'bold', 
-                color: '#3b98e1', fontFamily: 'custom'}}
-            > DELETE PLAYER  </Text>
+                color: '#3b98e1', fontFamily: 'custom'}}>
+            DELETE {playerName.toUpperCase()}  </Text>
         </View>
     )
 }
-
-
-           
+         
     
+export default function Players( { navigation } ) {
 
-export default function Players({ navigation }) {
+const [modalOpen, setModalOpen] = useState(false)
 
 const [players, setPlayer] = useState([
     {key: 0, playerName: 'Kotsky', won: 0, lost: 0, color: '#a9e4f1'},
@@ -48,45 +42,62 @@ const submitPlayer = (player) => {
             {key: Math.random().toString(), playerName: player, won: 0, lost: 0, color: '#a9e4f1'},
             ...prevPlayers
         ]
+        
     })
+
+    players.map(player => console.log(player.playerName))
+
 }
 
 
 
     return(
 <View style = {styles.container}>
+    <Modal 
+    transparent
+    visible = {modalOpen} 
+    animationType = 'fade'>
+        <View style = {styles.modal}>
+        <AddPlayer 
+        submitPlayer ={submitPlayer}
+        setModalOpen = {setModalOpen}
+        />
+        </View> 
+    </Modal>
+    
+
    <View style = {styles.list}>
-   <AddPlayer submitPlayer ={submitPlayer}/>
+
+        <TouchableOpacity 
+            onPress = {() => {setModalOpen(true)}}> 
+            <View style = {styles.addbtn}>
+                <Text style = {[styles.text, {alignSelf: 'center'}]}>
+                    ADD NEW PLAYER
+                </Text>
+            </View>
+       </TouchableOpacity>
+   
    
         <FlatList 
             data = {players}
             renderItem = {({ item }) => (
             <Swipeable 
-                renderLeftActions = {rightAction}
+                renderLeftActions = {()  => rightAction(item.playerName)}
                 onSwipeableWillOpen = {() => delPlayer(item.key)}>        
                     <TouchableOpacity 
-                        activeOpacity = {0.5}
                         style = {[styles.player,
                         {backgroundColor: item.color}]}
                         onPress={() => navigation.navigate('Board', item)}>
-                         <Text style = {{
-                            alignSelf: 'flex-end',
-                            fontSize: 30, 
-                            fontWeight: 'bold', 
-                            color: 'white', fontFamily: 'custom'}}>
+                         <Text style = {styles.text}>
                             {item.playerName.toUpperCase()}   
                         </Text>  
-                        <Text  style = {{
-                            alignSelf: 'flex-end',
-                            fontSize: 30, 
-                            fontWeight: 'bold', 
-                            color: 'white', fontFamily: 'custom'}}>  
+                        <Text  style = {styles.text}>  
                             {item.lost} - {item.won}
                         </Text>
                     </TouchableOpacity>
-        </Swipeable>
-        )}
-        />
+            </Swipeable>
+            )}
+            />
     
     </View>
 </View>
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
     list: {
         marginTop: 10,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
 
     player: {
@@ -134,6 +145,33 @@ const styles = StyleSheet.create({
         borderBottomWidth: 3,
         borderBottomColor: '#3b98e1',
         
-        }
+    },
+
+    text: {
+        alignSelf: 'flex-end',
+        fontSize: 30, 
+         
+        color: 'white', 
+        fontFamily: 'custom'
+
+    },
+
+    modal: {
+        flex: 1,
+        //opacity: .5,
+        backgroundColor: '#a9e4f1',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    addbtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#487eb0',
+        height: 75,
+        width: Dimensions.get('screen').width * 0.9,
+        
+    }
+   
 
 })
